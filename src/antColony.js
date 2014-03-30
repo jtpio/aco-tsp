@@ -4,7 +4,9 @@ var antColony = (function(ps) {
 	// colony
 	var	initPheromone,
 		pheromone,
-		best;
+		best,
+		it,
+		time;
 
 	// rendering
 	var	nodeTex = [],
@@ -14,7 +16,9 @@ var antColony = (function(ps) {
 		container = new PIXI.DisplayObjectContainer(),
 		back = new PIXI.DisplayObjectContainer(),
 		trail = new PIXI.Graphics(),
-		links = new PIXI.Graphics();
+		links = new PIXI.Graphics(),
+		itText,
+		bestText;
 
 	function _initGraphics() {
 		container.width = 1600;
@@ -49,6 +53,17 @@ var antColony = (function(ps) {
 		// pheromones
 		links.clear();
 		container.addChild(links);
+
+		// text
+		itText = new PIXI.Text("Iteration #0", { font: "35px Karla", fill: "white", align: "left" });
+		itText.position.x = 20;
+		itText.position.y = 20;
+		container.addChild(itText);
+
+		bestText = new PIXI.Text("Best: ?", { font: "35px Karla", fill: "white", align: "left" });
+		bestText.position.x = 20;
+		bestText.position.y = 60;
+		container.addChild(bestText);
 
 	}
 
@@ -180,6 +195,8 @@ var antColony = (function(ps) {
 		};
 		initPheromone = 1.0 / (nodes.length * best.cost);
 		_initPheromoneMatrix();
+		it = 0;
+		time = Date.now();
 	}
 
 	function _drawLinks() {
@@ -220,6 +237,8 @@ var antColony = (function(ps) {
 		},
 
 		render: function () {
+			var dt = (Date.now() - time) / 1000;
+
 			var toInit = queue.length > 0;
 			while (queue.length > 0) {
 				var pending = queue.shift();
@@ -228,17 +247,24 @@ var antColony = (function(ps) {
 
 			if (toInit) _init();
 
-			for (var i = 0; i < ps.nbAnts; i++) {
-				var candidate = {};
-				candidate.vector = _stepwiseConst(ps.heuristic);
-				candidate.cost = _cost(candidate.vector);
-				if (candidate.cost < best.cost) best = candidate;
-				_localUpdatePheromone(candidate);
+			if (dt * ps.speed >= 1) {
+				for (var i = 0; i < ps.nbAnts; i++) {
+					var candidate = {};
+					candidate.vector = _stepwiseConst(ps.heuristic);
+					candidate.cost = _cost(candidate.vector);
+					if (candidate.cost < best.cost) best = candidate;
+					_localUpdatePheromone(candidate);
+				}
+
+				_globalUpdatePheromone(best);
+				itText.setText("Iteration #" + it++);
+				bestText.setText("Best: " + Math.round(best.cost));
+				time = Date.now();
 			}
 
-			_globalUpdatePheromone(best);
 			_drawLinks();
 			_drawBest();
+
 		}
 	};
 

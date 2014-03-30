@@ -7,7 +7,8 @@ var params = (function() {
 		heuristic: 2.5,
 		history: 1.0,
 		cLocalPheromone: 0.1,
-		greedy: 0.9
+		greedy: 0.9,
+		speed: 10
 	};
 
 }());

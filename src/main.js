@@ -21,6 +21,7 @@ controllers.push(gui.add(params, 'decay', 0, 1));
 controllers.push(gui.add(params, 'heuristic', 0, 10));
 controllers.push(gui.add(params, 'greedy', 0, 10));
 controllers.push(gui.add(params, 'cLocalPheromone', 0, 1));
+gui.add(params, 'speed', 0.1, 100);
 
 controllers.forEach(function (ctrl) {
 	ctrl.onChange(function (value) {
@@ -28,14 +29,37 @@ controllers.forEach(function (ctrl) {
 	});
 });
 
-// run
-antColony.init();
-stage.addChild(antColony.container);
+// fonts
+WebFontConfig = {
+	google: {
+		families: [ 'Karla' ]
+	},
 
-function render() {
-	antColony.render();
-	renderer.render(stage);
+	active: function () {
+		run();
+	}
+};
+
+(function () { // local scope
+	var wf = document.createElement('script');
+	wf.src = ('https:' == document.location.protocol ? 'https' : 'http') +
+	'://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js';
+	wf.type = 'text/javascript';
+	wf.async = 'true';
+	var s = document.getElementsByTagName('script')[0];
+	s.parentNode.insertBefore(wf, s);
+}());
+
+function run() {
+	antColony.init();
+	stage.addChild(antColony.container);
+
+	function render() {
+		var time = Date.now();
+		antColony.render();
+		renderer.render(stage);
+		requestAnimFrame(render);
+	}
+
 	requestAnimFrame(render);
 }
-
-requestAnimFrame(render);
