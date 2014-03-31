@@ -10,7 +10,6 @@ var antColony = (function(ps) {
 
 	// rendering
 	var	nodeTex = [],
-		antTex = [],
 		nodes = [],
 		queue = [],
 		container = new PIXI.DisplayObjectContainer(),
@@ -18,7 +17,8 @@ var antColony = (function(ps) {
 		trail = new PIXI.Graphics(),
 		links = new PIXI.Graphics(),
 		itText,
-		bestText;
+		bestText,
+		nodesText;
 
 	function _initGraphics() {
 		container.width = 1600;
@@ -28,10 +28,6 @@ var antColony = (function(ps) {
 
 		for (var i = 1; i <= 3; i++) {
 			nodeTex.push(PIXI.Texture.fromImage("img/Node_" + i + ".png"));
-		}
-
-		for (var i = 1; i <= 3; i++) {
-			antTex.push(PIXI.Texture.fromImage("img/Ant_" + i + ".png"));
 		}
 
 		// background
@@ -55,15 +51,23 @@ var antColony = (function(ps) {
 		container.addChild(links);
 
 		// text
-		itText = new PIXI.Text("Iteration #0", { font: "35px Karla", fill: "white", align: "left" });
-		itText.position.x = 20;
+		itText = new PIXI.Text("Iterations: 0", { font: "35px Karla", fill: "white", align: "left" });
+		itText.position.x = 100;
 		itText.position.y = 20;
 		container.addChild(itText);
 
 		bestText = new PIXI.Text("Best: ?", { font: "35px Karla", fill: "white", align: "left" });
-		bestText.position.x = 20;
+		bestText.position.x = 100;
 		bestText.position.y = 60;
 		container.addChild(bestText);
+
+		nodesText = new PIXI.Text("Nodes: " + nodes.length, { font: "35px Karla", fill: "white", align: "left" });
+		nodesText.position.x = 100;
+		nodesText.position.y = 100;
+		container.addChild(nodesText);
+
+		// add the ant
+		container.addChild(ant.getSprite());
 
 	}
 
@@ -172,16 +176,16 @@ var antColony = (function(ps) {
 	}
 
 	function _globalUpdatePheromone(candidate) {
-		candidate.vector.forEach(function (x, i) {
-			var y = candidate.vector[(i+1)%candidate.vector.length];
+		candidate.indices.forEach(function (x, i) {
+			var y = candidate.indices[(i+1)%candidate.indices.length];
 			var value = ((1-ps.decay)*pheromone[x][y]) + (ps.decay*(1/candidate.cost));
 			pheromone[x][y] = pheromone[y][x] = value;
 		});
 	}
 
 	function _localUpdatePheromone(candidate) {
-		candidate.vector.forEach(function (x, i) {
-			var y = candidate.vector[(i+1)%candidate.vector.length];
+		candidate.indices.forEach(function (x, i) {
+			var y = candidate.indices[(i+1)%candidate.indices.length];
 			var value = ((1- ps.cLocalPheromone)*pheromone[x][y]) + (ps.cLocalPheromone*initPheromone);
 			pheromone[x][y] = pheromone[y][x] = value;
 		});
@@ -190,13 +194,18 @@ var antColony = (function(ps) {
 	function _init() {
 		var initPerm = _randomPermutation();
 		best = {
-			'vector': initPerm,
-			'cost': _cost(initPerm)
+			'indices': initPerm,
+			'cost': _cost(initPerm),
+			'path': _indicesToNodes(initPerm)
 		};
 		initPheromone = 1.0 / (nodes.length * best.cost);
 		_initPheromoneMatrix();
 		it = 0;
 		time = Date.now();
+	}
+
+	function _indicesToNodes(indices) {
+		return indices.map(function (id) { return nodes[id]; });
 	}
 
 	function _drawLinks() {
@@ -215,10 +224,10 @@ var antColony = (function(ps) {
 	function _drawBest() {
 		trail.clear();
 		links.lineStyle(10, 0x0C7EE8, 0.4);
-		links.moveTo(nodes[best.vector[0]].position.x, nodes[best.vector[0]].position.y);
-		best.vector.forEach(function (point, i) {
-			var j = (i+1)%best.vector.length;
-			links.lineTo(nodes[best.vector[j]].position.x, nodes[best.vector[j]].position.y);
+		links.moveTo(best.path[0].position.x, best.path[0].position.y);
+		best.path.forEach(function (point, i) {
+			var j = (i+1)%best.path.length;
+			links.lineTo(best.path[j].position.x, best.path[j].position.y);
 		});
 	}
 
@@ -247,18 +256,23 @@ var antColony = (function(ps) {
 
 			if (toInit) _init();
 
-			if (dt * ps.speed >= 1) {
+			if (dt * ps.simulationSpeed >= 1) {
 				for (var i = 0; i < ps.nbAnts; i++) {
 					var candidate = {};
-					candidate.vector = _stepwiseConst(ps.heuristic);
-					candidate.cost = _cost(candidate.vector);
-					if (candidate.cost < best.cost) best = candidate;
+					candidate.indices = _stepwiseConst(ps.heuristic);
+					candidate.cost = _cost(candidate.indices);
+					if (candidate.cost < best.cost) {
+						best = candidate;
+						best.path = _indicesToNodes(best.indices);
+						ant.followPath(best.path);
+					}
 					_localUpdatePheromone(candidate);
 				}
 
 				_globalUpdatePheromone(best);
 				itText.setText("Iteration #" + it++);
 				bestText.setText("Best: " + Math.round(best.cost));
+				nodesText.setText("Nodes: " + nodes.length);
 				time = Date.now();
 			}
 
