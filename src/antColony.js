@@ -142,7 +142,7 @@ var antColony = (function(ps) {
 			if (exclude.indexOf(i) === -1) {
 				var prob = { city: i };
 				prob.history = Math.pow(pheromone[lastCity][i], ps.history);
-				prob.heuristic = Math.pow(1 / distances[lastCity][i], ps.heuristic);
+				prob.heuristic = Math.pow(1 / (distances[lastCity][i] || 1e-6), ps.heuristic);
 				prob.prob = prob.history * prob.heuristic;
 				return prob;
 			}
