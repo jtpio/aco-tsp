@@ -4,6 +4,7 @@ var antColony = (function(ps) {
 	// colony
 	var	initPheromone,
 		pheromone,
+		distances,
 		best,
 		it,
 		time;
@@ -118,7 +119,7 @@ var antColony = (function(ps) {
 
 	function _cost(perm) {
 		return perm.reduce(function (prev, curr, i) {
-			return prev + _dist(nodes[perm[(i+1)%perm.length]], nodes[curr]);
+			return prev + distances[perm[(i+1)%perm.length]][curr];
 		}, 0);
 	}
 
@@ -141,7 +142,7 @@ var antColony = (function(ps) {
 			if (exclude.indexOf(i) === -1) {
 				var prob = { city: i };
 				prob.history = Math.pow(pheromone[lastCity][i], ps.history);
-				prob.heuristic = Math.pow(1 / _dist(nodes[lastCity], node), ps.heuristic);
+				prob.heuristic = Math.pow(1 / distances[lastCity][i], ps.heuristic);
 				prob.prob = prob.history * prob.heuristic;
 				return prob;
 			}
@@ -192,6 +193,7 @@ var antColony = (function(ps) {
 	}
 
 	function _init() {
+		_preComputeDistances();
 		var initPerm = _randomPermutation();
 		best = {
 			'indices': initPerm,
@@ -202,6 +204,16 @@ var antColony = (function(ps) {
 		_initPheromoneMatrix();
 		it = 0;
 		time = Date.now();
+	}
+
+	function _preComputeDistances() {
+		distances = [];
+		for (var i = 0; i < nodes.length; i++) {
+			distances.push([]);
+			for (var j = 0; j < nodes.length; j++) {
+				distances[i].push(_dist(nodes[i], nodes[j]));
+			}
+		}
 	}
 
 	function _indicesToNodes(indices) {

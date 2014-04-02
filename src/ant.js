@@ -17,8 +17,8 @@ var ant = (function(ps) {
 		ant.play();
 		ant.anchor.x = 0.5;
 		ant.anchor.y = 0.5;
-		ant.scale.x = 0.3;
-		ant.scale.y = 0.3;
+		ant.scale.x = 0.6;
+		ant.scale.y = 0.6;
 		ant.position.x = W / 2;
 		ant.position.y = H / 2;
 
