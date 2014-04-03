@@ -1,6 +1,6 @@
 var W = 1600,
 	H = 900,
-	ratio = 16/9;
+	ratio = W/H;
 	stage = new PIXI.Stage(0x000000),
 	renderer = PIXI.autoDetectRenderer(W, H, null, false, true);
 

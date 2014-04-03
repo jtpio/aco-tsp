@@ -48,7 +48,7 @@ var ant = (function(ps) {
 			tweens = _.flatten(path.map(function (p, i) {
 				return [
 					new TWEEN.Tween(rot)
-						.to({angle: _steerAngle(p, path[(i+1)%path.length].position)}, 250 / ps.antSpeed)
+						.to({angle: _steerAngle(p, path[(i+1)%path.length].position)}, 100 / ps.antSpeed)
 						.easing(TWEEN.Easing.Quadratic.Out)
 						.onUpdate(function () {
 							ant.rotation = this.angle;
