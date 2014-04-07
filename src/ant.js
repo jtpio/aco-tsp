@@ -2,7 +2,9 @@ var ant = (function(ps) {
 	'use strict';
 
 	// rendering
-	var antTex = [],
+	var W = 1600,
+		H = 900,
+		antTex = [],
 		tweens = [],
 		ant,
 		vanish;
@@ -32,7 +34,9 @@ var ant = (function(ps) {
 
 	return {
 
-		init: function () {
+		init: function (width, height) {
+			W = width;
+			H = height;
 			_initGraphics();
 		},
 

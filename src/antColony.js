@@ -10,7 +10,9 @@ var antColony = (function(ps) {
 		time;
 
 	// rendering
-	var	nodeTex = [],
+	var	W = 1600,
+		H = 900,
+		nodeTex = [],
 		nodes = [],
 		queue = [],
 		container = new PIXI.DisplayObjectContainer(),
@@ -74,7 +76,7 @@ var antColony = (function(ps) {
 
 	function _initColony() {
 		for (var i = 0; i < 5; i++) {
-			_addNode(~~(Math.random() * W), ~~(Math.random() * H));
+			_addNode(~~((Math.random() * 0.8 + 0.1) * W), ~~((Math.random() * 0.8 + 0.1) * H));
 	    }
 	}
 
@@ -247,7 +249,9 @@ var antColony = (function(ps) {
 		container: container,
 		addNode: _addNode,
 
-		init: function () {
+		init: function (width, height) {
+			W = width;
+			H = height;
 			_initGraphics();
 			_initColony();
 			_init();

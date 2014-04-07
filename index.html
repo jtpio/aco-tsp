@@ -9,11 +9,16 @@
 			background-color: #000000;
 		}
 	</style>
+
+	<link rel="stylesheet" href="http://getbootstrap.com/dist/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="css/style.css" />
+	<script src="lib/jquery-1.11.0.min.js"></script>
 	<script src="lib/dat.gui.min.js"></script>
 	<script src="lib/stats.min.js"></script>
 	<script src="lib/tween.min.js"></script>
 	<script src="lib/pixi.dev.js"></script>
 	<script src="lib/lodash.min.js"></script>
+	<script src="lib/jquery.popupoverlay.min.js"></script>
 
 </head>
 <body>
@@ -21,5 +26,35 @@
 	<script src="src/ant.js"></script>
 	<script src="src/antColony.js"></script>
 	<script src="src/main.js"></script>
+
+	<div id="help" class="container center well">
+		<!-- <div class="col-md-6"> -->
+			<h1> Ant Colony Optimization </h1>
+			<h2> Solving the Travelling Salesman Problem </h2>
+
+			<p>
+			This small experiment stands as a way for visualizing the Travelling Salesman Problem (TSP) solution, using the Ant Colony Optimization strategy.
+			</p>
+
+			<p>
+			The TSP can be stated as follow: given a list of nodes, find the shortest route that visits each city only once and returns to the origin city. More info on <a href="http://en.wikipedia.org/wiki/Travelling_salesman_problem" > Wikipedia </a>
+			</p>
+
+			<p>
+				The ACO algorithm is used to solve the problem more efficiently than a brute-force, and is based a nature inspired behaviours of ants letting pheromones on their way. <br>
+				This demo is based on the section 5.3 from the book Clever Algorithms. You can read more about it <a href="http://www.cleveralgorithms.com/nature-inspired/swarm/ant_colony_system.html"> here </a>
+			</p>
+
+			<h3> Demo </h3>
+			<ul>
+				<li>Click on the canvas to add new nodes </li>
+				<li> Drag and drop the nodes to change their positions </li>
+				<li> Play around with the different parameters </li>
+			</ul>
+
+			<button class="help_close btn btn-default">Close</button>
+		<!-- </div> -->
+	</div>
+
 </body>
 </html>
