@@ -16,9 +16,9 @@ window.addEventListener('resize', function () {
 
 // stats
 var stats = new Stats();
-document.body.appendChild(stats.domElement);
-stats.domElement.style.position = 'absolute';
-stats.domElement.style.top = '0px';
+// document.body.appendChild(stats.domElement);
+// stats.domElement.style.position = 'absolute';
+// stats.domElement.style.top = '0px';
 
 // gui
 var gui = new dat.GUI();

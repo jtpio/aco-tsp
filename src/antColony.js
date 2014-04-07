@@ -53,17 +53,17 @@ var antColony = (function(ps) {
 
 		// text
 		itText = new PIXI.Text("Iterations: 0", { font: "35px Karla", fill: "white", align: "left" });
-		itText.position.x = 100;
+		itText.position.x = 20;
 		itText.position.y = 20;
 		container.addChild(itText);
 
 		bestText = new PIXI.Text("Best: ?", { font: "35px Karla", fill: "white", align: "left" });
-		bestText.position.x = 100;
+		bestText.position.x = 20;
 		bestText.position.y = 60;
 		container.addChild(bestText);
 
 		nodesText = new PIXI.Text("Nodes: " + nodes.length, { font: "35px Karla", fill: "white", align: "left" });
-		nodesText.position.x = 100;
+		nodesText.position.x = 20;
 		nodesText.position.y = 100;
 		container.addChild(nodesText);
 
