@@ -1,105 +1,105 @@
 $(document).ready(function() {
 
-	var W = 1600,
-		H = 900,
-		ratio = W/H;
-		stage = new PIXI.Stage(0x000000),
-		renderer = PIXI.autoDetectRenderer(W, H, null, false, true),
-		started = false;
+    var W = 1600,
+        H = 900,
+        ratio = W/H;
+        stage = new PIXI.Stage(0x000000),
+        renderer = PIXI.autoDetectRenderer(W, H, null, false, true),
+        started = false;
 
-	document.body.appendChild(renderer.view);
-	renderer.view.style.width = window.innerWidth + "px";
-	renderer.view.style.height = window.innerHeight + "px";
-	renderer.view.style.display = "block";
+    document.body.appendChild(renderer.view);
+    renderer.view.style.width = window.innerWidth + "px";
+    renderer.view.style.height = window.innerHeight + "px";
+    renderer.view.style.display = "block";
 
-	window.addEventListener('resize', function () {
-	    renderer.view.style.width = window.innerWidth + "px";
-		renderer.view.style.height = (window.innerWidth / ratio) + "px"; // window.innerHeight + "px";
-	}, false);
+    window.addEventListener('resize', function () {
+        renderer.view.style.width = window.innerWidth + "px";
+        renderer.view.style.height = (window.innerWidth / ratio) + "px"; // window.innerHeight + "px";
+    }, false);
 
-	// stats
-	var stats = new Stats();
-	// document.body.appendChild(stats.domElement);
-	// stats.domElement.style.position = 'absolute';
-	// stats.domElement.style.top = '0px';
+    // stats
+    var stats = new Stats();
+    // document.body.appendChild(stats.domElement);
+    // stats.domElement.style.position = 'absolute';
+    // stats.domElement.style.top = '0px';
 
-	// gui
-	function initDatGui() {
-		var gui = new dat.GUI();
-		var controllers = [];
-		controllers.push(gui.add(params, 'nbAnts', 1, 20).name('Number of Ants'));
-		controllers.push(gui.add(params, 'decay', 0, 1).name('Decay factor'));
-		controllers.push(gui.add(params, 'heuristic', 1, 6).name('Heuristic coeff'));
-		controllers.push(gui.add(params, 'greedy', 0, 5).name('Greediness factor'));
-		controllers.push(gui.add(params, 'localPheromone', 0, 1).name('History factor'));
-		gui.add(params, 'simulationSpeed', 0.1, 100).name('Simulation speed');
-		controllers.push(gui.add(params, 'antSpeed', 1, 5).step(1).name('Ant speed'));
+    // gui
+    function initDatGui() {
+        var gui = new dat.GUI();
+        var controllers = [];
+        controllers.push(gui.add(params, 'nbAnts', 1, 20).name('Number of Ants'));
+        controllers.push(gui.add(params, 'decay', 0, 1).name('Decay factor'));
+        controllers.push(gui.add(params, 'heuristic', 1, 6).name('Heuristic coeff'));
+        controllers.push(gui.add(params, 'greedy', 0, 5).name('Greediness factor'));
+        controllers.push(gui.add(params, 'localPheromone', 0, 1).name('History factor'));
+        gui.add(params, 'simulationSpeed', 0.1, 100).name('Simulation speed');
+        controllers.push(gui.add(params, 'antSpeed', 1, 5).step(1).name('Ant speed'));
 
-		controllers.forEach(function (ctrl) {
-			ctrl.onChange(function (value) {
-				antColony.reset();
-			});
-		});
-	}
+        controllers.forEach(function (ctrl) {
+            ctrl.onChange(function (value) {
+                antColony.reset();
+            });
+        });
+    }
 
-	// fonts
-	WebFontConfig = {
-		google: {
-			families: [ 'Karla' ]
-		},
+    // fonts
+    WebFontConfig = {
+        google: {
+            families: [ 'Karla' ]
+        },
 
-		active: function () {
-			run();
-		}
-	};
+        active: function () {
+            run();
+        }
+    };
 
-	(function () { // local scope
-		var wf = document.createElement('script');
-		wf.src = ('https:' == document.location.protocol ? 'https' : 'http') +
-		'://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js';
-		wf.type = 'text/javascript';
-		wf.async = 'true';
-		var s = document.getElementsByTagName('script')[0];
-		s.parentNode.insertBefore(wf, s);
-	}());
+    (function () { // local scope
+        var wf = document.createElement('script');
+        wf.src = ('https:' == document.location.protocol ? 'https' : 'http') +
+        '://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js';
+        wf.type = 'text/javascript';
+        wf.async = 'true';
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(wf, s);
+    }());
 
-	function run() {
-		ant.init(W, H);
-		antColony.init(W, H);
-		stage.addChild(antColony.container);
+    function run() {
+        ant.init(W, H);
+        antColony.init(W, H);
+        stage.addChild(antColony.container);
 
-		// first render
-		antColony.render();
-		renderer.render(stage);
+        // first render
+        antColony.render();
+        renderer.render(stage);
 
-		function render() {
-			var time = Date.now();
-			stats.begin();
-			TWEEN.update();
-			antColony.render();
-			renderer.render(stage);
-			stats.end();
-			requestAnimFrame(render);
-		}
+        function render() {
+            var time = Date.now();
+            stats.begin();
+            TWEEN.update();
+            antColony.render();
+            renderer.render(stage);
+            stats.end();
+            requestAnimFrame(render);
+        }
 
-		$('#help').popup({
-			transition: 'all 1.0s',
-			autoopen: true,
-			background: true,
-			color: '#EAEAEA',
-			// opacity: 0.9,
-			closetransitionend: function () {
-				if (!started) {
-					initDatGui();
-					requestAnimFrame(render);
-					started = true;
-				}
-			}
-		});
+        $('#help').popup({
+            transition: 'all 1.0s',
+            autoopen: true,
+            background: true,
+            color: '#EAEAEA',
+            // opacity: 0.9,
+            closetransitionend: function () {
+                if (!started) {
+                    initDatGui();
+                    requestAnimFrame(render);
+                    started = true;
+                }
+            }
+        });
 
-		$('#intro_img').click(function () {
-			$('#help').popup();
-		});
-	}
+        $('#intro_img').click(function () {
+            $('#help').popup();
+        });
+    }
 
 });

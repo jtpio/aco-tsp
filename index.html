@@ -1,77 +1,77 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-	<title>Ants</title>
-	<style>
-		body {
-			margin: 0;
-			padding: 0;
-			background-color: #000000;
-		}
-	</style>
+    <title>Ants</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #000000;
+        }
+    </style>
 
-	<link rel="stylesheet" href="http://getbootstrap.com/dist/css/bootstrap.min.css" />
-	<link rel="stylesheet" href="css/style.css" />
-	<script src="lib/jquery-1.11.0.min.js"></script>
-	<script src="lib/dat.gui.min.js"></script>
-	<script src="lib/stats.min.js"></script>
-	<script src="lib/tween.min.js"></script>
-	<script src="lib/pixi.dev.js"></script>
-	<script src="lib/lodash.min.js"></script>
-	<script src="lib/jquery.popupoverlay.min.js"></script>
+    <link rel="stylesheet" href="http://getbootstrap.com/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/style.css" />
+    <script src="lib/jquery-1.11.0.min.js"></script>
+    <script src="lib/dat.gui.min.js"></script>
+    <script src="lib/stats.min.js"></script>
+    <script src="lib/tween.min.js"></script>
+    <script src="lib/pixi.dev.js"></script>
+    <script src="lib/lodash.min.js"></script>
+    <script src="lib/jquery.popupoverlay.min.js"></script>
 
 </head>
 <body>
-	<script src="src/params.js"></script>
-	<script src="src/ant.js"></script>
-	<script src="src/antColony.js"></script>
-	<script src="src/main.js"></script>
+    <script src="src/params.js"></script>
+    <script src="src/ant.js"></script>
+    <script src="src/antColony.js"></script>
+    <script src="src/main.js"></script>
 
-	<div id="help" class="container center well">
-		<!-- <div class="col-md-6"> -->
-			<span class="wip label label-warning"> Work in progress </span>
-			<h2> Ant Colony Optimization </h2>
-			<h3> Solving the Travelling Salesman Problem </h3>
+    <div id="help" class="container center well">
+        <!-- <div class="col-md-6"> -->
+            <span class="wip label label-warning"> Work in progress </span>
+            <h2> Ant Colony Optimization </h2>
+            <h3> Solving the Travelling Salesman Problem </h3>
 
-			<p>
-			This small experiment stands as a way for visualizing the Travelling Salesman Problem (TSP) solution, using the Ant Colony Optimization strategy.
-			</p>
+            <p>
+            This small experiment stands as a way for visualizing the Travelling Salesman Problem (TSP) solution, using the Ant Colony Optimization strategy.
+            </p>
 
-			<p>
-			The TSP can be stated as follow: <em> given a list of nodes, find the shortest route that visits each city only once and returns to the origin city. </em> <br>
-			More info on <a href="http://en.wikipedia.org/wiki/Travelling_salesman_problem" > Wikipedia </a>
-			</p>
+            <p>
+            The TSP can be stated as follow: <em> given a list of nodes, find the shortest route that visits each city only once and returns to the origin city. </em> <br>
+            More info on <a href="http://en.wikipedia.org/wiki/Travelling_salesman_problem" > Wikipedia </a>
+            </p>
 
-			<p>
-				The ACO algorithm is used to solve the problem more efficiently than a brute-force approach, and is based on nature inspired behaviours of ants letting pheromones on their way. <br>
-				This demo is based on the section 5.3 from the book Clever Algorithms. You can read more about it <a href="http://www.cleveralgorithms.com/nature-inspired/swarm/ant_colony_system.html"> here </a>
-			</p>
+            <p>
+                The ACO algorithm is used to solve the problem more efficiently than a brute-force approach, and is based on nature inspired behaviours of ants letting pheromones on their way. <br>
+                This demo is based on the section 5.3 from the book Clever Algorithms. You can read more about it <a href="http://www.cleveralgorithms.com/nature-inspired/swarm/ant_colony_system.html"> here </a>
+            </p>
 
-			<div class="row instructions">
-				<div class="col-md-4">
-					<strong> Click </strong> on the canvas to <strong> add </strong> new nodes
-				</div>
-				<div class="col-md-4">
-					<strong> Drag and drop </strong> the nodes to change their positions
-				</div>
-				<div class="col-md-4">
-					Play around with the different <strong> parameters </strong>
-				</div>
-			</div>
+            <div class="row instructions">
+                <div class="col-md-4">
+                    <strong> Click </strong> on the canvas to <strong> add </strong> new nodes
+                </div>
+                <div class="col-md-4">
+                    <strong> Drag and drop </strong> the nodes to change their positions
+                </div>
+                <div class="col-md-4">
+                    Play around with the different <strong> parameters </strong>
+                </div>
+            </div>
 
-			<div class="row text-center">
-				<button class="help_close btn btn-default"> Enjoy </button>
-			</div>
-		<!-- </div> -->
-	</div>
+            <div class="row text-center">
+                <button class="help_close btn btn-default"> Enjoy </button>
+            </div>
+        <!-- </div> -->
+    </div>
 
-	<div class="credits">
-		Made by <a href="https://github.com/jtuloup" > Jeremy Tuloup </a> - Graphics by <a href="http://eanart.com"> Erik Nilsson </a>
-	</div>
+    <div class="credits">
+        Made by <a href="https://github.com/jtuloup" > Jeremy Tuloup </a> - Graphics by <a href="http://eanart.com"> Erik Nilsson </a>
+    </div>
 
-	<div class="intro">
-		<img id="intro_img" src="img/intro.png">
-	</div>
+    <div class="intro">
+        <img id="intro_img" src="img/intro.png">
+    </div>
 
 </body>
 </html>
