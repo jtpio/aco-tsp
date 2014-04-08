@@ -6,7 +6,7 @@ var params = (function() {
 		decay: 0.1,
 		heuristic: 2.5,
 		history: 1.0,
-		cLocalPheromone: 0.1,
+		localPheromone: 0.1,
 		greedy: 0.9,
 		antSpeed: 2,
 		simulationSpeed: 10

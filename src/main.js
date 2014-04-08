@@ -4,7 +4,8 @@ $(document).ready(function() {
 		H = 900,
 		ratio = W/H;
 		stage = new PIXI.Stage(0x000000),
-		renderer = PIXI.autoDetectRenderer(W, H, null, false, true);
+		renderer = PIXI.autoDetectRenderer(W, H, null, false, true),
+		started = false;
 
 	document.body.appendChild(renderer.view);
 	renderer.view.style.width = window.innerWidth + "px";
@@ -13,7 +14,7 @@ $(document).ready(function() {
 
 	window.addEventListener('resize', function () {
 	    renderer.view.style.width = window.innerWidth + "px";
-		renderer.view.style.height = window.innerHeight/*(window.innerWidth / ratio)*/ + "px"; // window.innerHeight + "px";
+		renderer.view.style.height = (window.innerWidth / ratio) + "px"; // window.innerHeight + "px";
 	}, false);
 
 	// stats
@@ -26,13 +27,13 @@ $(document).ready(function() {
 	function initDatGui() {
 		var gui = new dat.GUI();
 		var controllers = [];
-		controllers.push(gui.add(params, 'nbAnts', 1, 20));
-		controllers.push(gui.add(params, 'decay', 0, 1));
-		controllers.push(gui.add(params, 'heuristic', 0, 10));
-		controllers.push(gui.add(params, 'greedy', 0, 10));
-		controllers.push(gui.add(params, 'cLocalPheromone', 0, 1));
-		gui.add(params, 'simulationSpeed', 0.1, 100);
-		gui.add(params, 'antSpeed', 1, 5).step(1);
+		controllers.push(gui.add(params, 'nbAnts', 1, 20).name('Number of Ants'));
+		controllers.push(gui.add(params, 'decay', 0, 1).name('Decay factor'));
+		controllers.push(gui.add(params, 'heuristic', 1, 6).name('Heuristic coeff'));
+		controllers.push(gui.add(params, 'greedy', 0, 5).name('Greediness factor'));
+		controllers.push(gui.add(params, 'localPheromone', 0, 1).name('History factor'));
+		gui.add(params, 'simulationSpeed', 0.1, 100).name('Simulation speed');
+		controllers.push(gui.add(params, 'antSpeed', 1, 5).step(1).name('Ant speed'));
 
 		controllers.forEach(function (ctrl) {
 			ctrl.onChange(function (value) {
@@ -88,9 +89,16 @@ $(document).ready(function() {
 			color: '#EAEAEA',
 			// opacity: 0.9,
 			closetransitionend: function () {
-				initDatGui();
-				requestAnimFrame(render);
+				if (!started) {
+					initDatGui();
+					requestAnimFrame(render);
+					started = true;
+				}
 			}
+		});
+
+		$('#intro_img').click(function () {
+			$('#help').popup();
 		});
 	}
 

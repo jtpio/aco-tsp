@@ -189,7 +189,7 @@ var antColony = (function(ps) {
 	function _localUpdatePheromone(candidate) {
 		candidate.indices.forEach(function (x, i) {
 			var y = candidate.indices[(i+1)%candidate.indices.length];
-			var value = ((1- ps.cLocalPheromone)*pheromone[x][y]) + (ps.cLocalPheromone*initPheromone);
+			var value = ((1- ps.localPheromone)*pheromone[x][y]) + (ps.localPheromone*initPheromone);
 			pheromone[x][y] = pheromone[y][x] = value;
 		});
 	}

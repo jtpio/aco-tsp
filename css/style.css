@@ -5,3 +5,32 @@ body {
 #help {
 	display: none;
 }
+
+.credits {
+	position: fixed;
+	bottom: 20px;
+	left: 20px;
+	color: white;
+}
+
+.intro {
+	cursor: pointer;
+	position: fixed;
+	bottom: 10px;
+	right: 10px;
+}
+
+.instructions {
+	font-size: 24px;
+	text-align: center;
+}
+
+.help_close {
+	margin-top: 20px;
+}
+
+.wip {
+	position: fixed;
+}
+
+@link-color
