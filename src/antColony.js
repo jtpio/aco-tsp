@@ -53,6 +53,10 @@ var antColony = (function(ps) {
         links.clear();
         container.addChild(links);
 
+        // trail
+        trail.clear();
+        container.addChild(trail);
+
         // text
         itText = new PIXI.Text("Iterations: 0", { font: "35px Karla", fill: "white", align: "left" });
         itText.position.x = 20;
@@ -237,11 +241,11 @@ var antColony = (function(ps) {
 
     function _drawBest() {
         trail.clear();
-        links.lineStyle(10, 0x0C7EE8, 0.4);
-        links.moveTo(best.path[0].position.x, best.path[0].position.y);
+        trail.lineStyle(10, 0x0C7EE8, 0.4);
+        trail.moveTo(best.path[0].position.x, best.path[0].position.y);
         best.path.forEach(function (point, i) {
             var j = (i+1)%best.path.length;
-            links.lineTo(best.path[j].position.x, best.path[j].position.y);
+            trail.lineTo(best.path[j].position.x, best.path[j].position.y);
         });
     }
 
@@ -259,6 +263,14 @@ var antColony = (function(ps) {
 
         reset: function () {
             _init();
+        },
+
+        togglePheromones: function () {
+            links.visible = ps.showPheromones;
+        },
+
+        togglePath: function () {
+            trail.visible = ps.showPath;
         },
 
         render: function () {

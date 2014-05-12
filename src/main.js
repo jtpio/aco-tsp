@@ -34,6 +34,12 @@ $(document).ready(function() {
         controllers.push(gui.add(params, 'localPheromone', 0, 1).name('History factor'));
         gui.add(params, 'simulationSpeed', 0.1, 100).name('Simulation speed');
         controllers.push(gui.add(params, 'antSpeed', 1, 5).step(1).name('Ant speed'));
+        gui.add(params, 'showPheromones').name('Pheromones').onChange(function (value) {
+            antColony.togglePheromones();
+        });
+        gui.add(params, 'showPath').name('Path').onChange(function (value) {
+            antColony.togglePath();
+        });
 
         controllers.forEach(function (ctrl) {
             ctrl.onChange(function (value) {

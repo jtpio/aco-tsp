@@ -9,7 +9,9 @@ var params = (function() {
         localPheromone: 0.1,
         greedy: 0.9,
         antSpeed: 2,
-        simulationSpeed: 20
+        simulationSpeed: 20,
+        showPheromones: true,
+        showPath: true
     };
 
 }());
