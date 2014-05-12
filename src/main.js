@@ -8,13 +8,13 @@ $(document).ready(function() {
         started = false;
 
     document.body.appendChild(renderer.view);
-    renderer.view.style.width = window.innerWidth + "px";
-    renderer.view.style.height = window.innerHeight + "px";
+    renderer.view.style.width = (window.innerWidth - 20) + "px";
+    renderer.view.style.height = (window.innerHeight - 20) + "px";
     renderer.view.style.display = "block";
 
     window.addEventListener('resize', function () {
-        renderer.view.style.width = window.innerWidth + "px";
-        renderer.view.style.height = (window.innerWidth / ratio) + "px"; // window.innerHeight + "px";
+        renderer.view.style.width = (window.innerWidth - 20) + "px";
+        renderer.view.style.height = Math.min(window.innerHeight - 20, (window.innerWidth / ratio - 20)) + "px"; //0.9*window.innerHeight + "px";
     }, false);
 
     // stats
@@ -28,9 +28,9 @@ $(document).ready(function() {
         var gui = new dat.GUI();
         var controllers = [];
         controllers.push(gui.add(params, 'nbAnts', 1, 20).name('Number of Ants'));
-        controllers.push(gui.add(params, 'decay', 0, 1).name('Decay factor'));
-        controllers.push(gui.add(params, 'heuristic', 1, 6).name('Heuristic coeff'));
-        controllers.push(gui.add(params, 'greedy', 0, 5).name('Greediness factor'));
+        controllers.push(gui.add(params, 'decay', 0, 0.5).name('Decay factor'));
+        controllers.push(gui.add(params, 'heuristic', 2, 5).name('Heuristic coeff'));
+        controllers.push(gui.add(params, 'greedy', 0, 2).name('Greediness factor'));
         controllers.push(gui.add(params, 'localPheromone', 0, 1).name('History factor'));
         gui.add(params, 'simulationSpeed', 0.1, 100).name('Simulation speed');
         controllers.push(gui.add(params, 'antSpeed', 1, 5).step(1).name('Ant speed'));

@@ -2,11 +2,11 @@ var antColony = (function(ps) {
     'use strict';
 
     // colony
-    var initPheromone,
+    var it = 0,
+        initPheromone,
         pheromone,
         distances,
         best,
-        it,
         time;
 
     // rendering
@@ -59,14 +59,14 @@ var antColony = (function(ps) {
         itText.position.y = 20;
         container.addChild(itText);
 
-        bestText = new PIXI.Text("Best: ?", { font: "35px Karla", fill: "white", align: "left" });
+        bestText = new PIXI.Text("Best: ?", { font: "35px Karla", fill: "green", align: "left" });
         bestText.position.x = 20;
         bestText.position.y = 60;
         container.addChild(bestText);
 
         nodesText = new PIXI.Text("Nodes: " + nodes.length, { font: "35px Karla", fill: "white", align: "left" });
         nodesText.position.x = 20;
-        nodesText.position.y = 100;
+        nodesText.position.y = 140;
         container.addChild(nodesText);
 
         // add the ant
@@ -88,8 +88,8 @@ var antColony = (function(ps) {
         node.anchor.y = 0.5;
         node.position.x = x;
         node.position.y = y;
-        node.scale.x = 0.2;
-        node.scale.y = 0.2;
+        node.scale.x = 0.17;
+        node.scale.y = 0.17;
         node.setInteractive(true);
         node.mousedown = node.touchstart = function(data) {
             data.originalEvent.preventDefault();
@@ -280,6 +280,7 @@ var antColony = (function(ps) {
                     if (candidate.cost < best.cost) {
                         best = candidate;
                         best.path = _indicesToNodes(best.indices);
+                        best.it = it;
                         ant.followPath(best.path);
                     }
                     _localUpdatePheromone(candidate);
@@ -287,7 +288,7 @@ var antColony = (function(ps) {
 
                 _globalUpdatePheromone(best);
                 itText.setText("Iteration #" + it++);
-                bestText.setText("Best: " + Math.round(best.cost));
+                bestText.setText("Best: " + Math.round(best.cost) + "\n -> found at #" + best.it);
                 nodesText.setText("Nodes: " + nodes.length);
                 time = Date.now();
             }
