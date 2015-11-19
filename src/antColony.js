@@ -2,26 +2,26 @@ var antColony = (function(ps) {
     'use strict';
 
     // colony
-    var it = 0,
-        initPheromone,
-        pheromone,
-        distances,
-        best,
-        time;
+	var it = 0;
+	var initPheromone;
+	var pheromone;
+	var distances;
+	var best;
+	var time;
 
     // rendering
-    var W = 1600,
-        H = 900,
-        nodeTex = [],
-        nodes = [],
-        queue = [],
-        container = new PIXI.DisplayObjectContainer(),
-        back = new PIXI.DisplayObjectContainer(),
-        trail = new PIXI.Graphics(),
-        links = new PIXI.Graphics(),
-        itText,
-        bestText,
-        nodesText;
+    var W = 1600;
+    var H = 900;
+    var nodeTex = [];
+    var nodes = [];
+    var queue = [];
+    var container = new PIXI.Container();
+    var back = PIXI.Sprite.fromImage('img/1x1.png');
+    var trail = new PIXI.Graphics();
+    var links = new PIXI.Graphics();
+    var itText;
+    var bestText;
+    var nodesText;
 
     function _initGraphics() {
         container.width = 1600;
@@ -34,19 +34,17 @@ var antColony = (function(ps) {
         }
 
         // background
-        back.setInteractive(true);
-        back.hitArea = new PIXI.Rectangle(
-            container.position.x,
-            container.position.y,
-            container.width,
-            container.height
-        );
-        back.click = function (event) {
+        back.interactive = true;
+		back.position.x = 0;
+		back.position.y = 0;
+		back.width = 1600;
+		back.height = 900;
+        back.on('click', function (event) {
             queue.push({
-                x: event.global.x,
-                y: event.global.y
+                x: event.data.global.x,
+                y: event.data.global.y
             });
-        };
+        });
         container.addChild(back);
 
         // pheromones
@@ -85,7 +83,7 @@ var antColony = (function(ps) {
     }
 
     function _addNode(x, y) {
-        var node = new PIXI.MovieClip(nodeTex);
+        var node = new PIXI.extras.MovieClip(nodeTex);
         node.play();
         node.animationSpeed = 0.1;
         node.anchor.x = 0.5;
@@ -94,26 +92,26 @@ var antColony = (function(ps) {
         node.position.y = y;
         node.scale.x = 0.17;
         node.scale.y = 0.17;
-        node.setInteractive(true);
+        node.interactive = true;
         node.mousedown = node.touchstart = function(data) {
-            data.originalEvent.preventDefault();
+            data.data.originalEvent.preventDefault();
             this.data = data;
             this.alpha = 0.9;
             this.dragging = true;
         };
         node.mouseup = node.mouseupoutside = node.touchend = node.touchendoutside = function(data) {
-            this.alpha = 1
+            this.alpha = 1;
             this.dragging = false;
             this.data = null;
             _init(); // restart simulation
         };
         node.mousemove = node.touchmove = function(data) {
             if (this.dragging) {
-                var newPosition = this.data.getLocalPosition(this.parent);
+                var newPosition = data.data.getLocalPosition(this.parent);
                 this.position.x = newPosition.x;
                 this.position.y = newPosition.y;
             }
-        }
+        };
         node.buttonMode = true;
         nodes.push(node);
         container.addChild(node);
@@ -192,8 +190,8 @@ var antColony = (function(ps) {
 
     function _localUpdatePheromone(candidate) {
         candidate.indices.forEach(function (x, i) {
-            var y = candidate.indices[(i+1)%candidate.indices.length];
-            var value = ((1- ps.localPheromone)*pheromone[x][y]) + (ps.localPheromone*initPheromone);
+            var y = candidate.indices[(i + 1) % candidate.indices.length];
+            var value = ((1 - ps.localPheromone) * pheromone[x][y]) + (ps.localPheromone * initPheromone);
             pheromone[x][y] = pheromone[y][x] = value;
         });
     }
@@ -228,8 +226,8 @@ var antColony = (function(ps) {
 
     function _drawLinks() {
         links.clear();
-        for (var i = 0, len = pheromone.length; i < len; i++) {
-            for (var j = i + 1, len = pheromone[i].length; j < len; j++) {
+        for (var i = 0; i < pheromone.length; i++) {
+            for (var j = i + 1; j < pheromone[i].length; j++) {
                 if (i !== j) {
                     links.lineStyle(6, 0xffffff, pheromone[i][j] * 12000);
                     links.moveTo(nodes[i].position.x, nodes[i].position.y);
@@ -299,9 +297,9 @@ var antColony = (function(ps) {
                 }
 
                 _globalUpdatePheromone(best);
-                itText.setText("Iteration #" + it++);
-                bestText.setText("Best: " + Math.round(best.cost) + "\n -> found at #" + best.it);
-                nodesText.setText("Nodes: " + nodes.length);
+                itText.text = 'Iteration #' + it++;
+                bestText.text = "Best: " + Math.round(best.cost) + "\n -> found at #" + best.it;
+                nodesText.text = "Nodes: " + nodes.length;
                 time = Date.now();
             }
 

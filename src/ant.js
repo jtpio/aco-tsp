@@ -2,19 +2,19 @@ var ant = (function(ps) {
     'use strict';
 
     // rendering
-    var W = 1600,
-        H = 900,
-        antTex = [],
-        tweens = [],
-        ant,
-        vanish;
+    var W = 1600;
+	var H = 900;
+	var antTex = [];
+	var tweens = [];
+	var ant;
+	var vanish;
 
     function _initGraphics() {
         for (var i = 1; i <= 3; i++) {
             antTex.push(PIXI.Texture.fromImage("img/Ant_" + i + ".png"));
         }
 
-        ant = new PIXI.MovieClip(antTex);
+        ant = new PIXI.extras.MovieClip(antTex);
         ant.animationSpeed = 0.1;
         ant.play();
         ant.anchor.x = 0.5;
@@ -27,8 +27,8 @@ var ant = (function(ps) {
     }
 
     function _steerAngle(start, end) {
-        var dx = end.x - start.x,
-            dy = end.y - start.y;
+        var dx = end.x - start.x;
+        var dy = end.y - start.y;
         return Math.atan2(dy, dx) + Math.PI / 2;
     }
 

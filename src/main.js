@@ -1,11 +1,10 @@
 $(document).ready(function() {
 
-    var W = 1600,
-        H = 900,
-        ratio = W/H;
-        stage = new PIXI.Stage(0x000000),
-        renderer = PIXI.autoDetectRenderer(W, H, null, false, true),
-        started = false;
+	var W = 1600;
+	var H = 900;
+	var ratio = W/H;
+	var renderer = PIXI.autoDetectRenderer(W, H, null, false, true);
+	var started = false;
 
     document.body.appendChild(renderer.view);
     renderer.view.style.width = (window.innerWidth - 20) + "px";
@@ -72,20 +71,19 @@ $(document).ready(function() {
     function run() {
         ant.init(W, H);
         antColony.init(W, H);
-        stage.addChild(antColony.container);
 
         // first render
         antColony.render();
-        renderer.render(stage);
+        renderer.render(antColony.container);
 
         function render() {
             var time = Date.now();
             stats.begin();
             TWEEN.update();
             antColony.render();
-            renderer.render(stage);
+            renderer.render(antColony.container);
             stats.end();
-            requestAnimFrame(render);
+            requestAnimationFrame(render);
         }
 
         $('#help').popup({
@@ -97,7 +95,7 @@ $(document).ready(function() {
             closetransitionend: function () {
                 if (!started) {
                     initDatGui();
-                    requestAnimFrame(render);
+                    requestAnimationFrame(render);
                     started = true;
                 }
             }
