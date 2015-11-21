@@ -28,7 +28,6 @@ $(document).ready(function() {
         var controllers = [];
         controllers.push(gui.add(params, 'nbAnts', 1, 20).name('Number of Ants'));
         controllers.push(gui.add(params, 'decay', 0, 0.5).name('Decay factor'));
-        controllers.push(gui.add(params, 'heuristic', 2, 5).name('Heuristic coeff'));
         controllers.push(gui.add(params, 'greedy', 0, 2).name('Greediness factor'));
         controllers.push(gui.add(params, 'localPheromone', 0, 1).name('History factor'));
         gui.add(params, 'simulationSpeed', 0.1, 100).name('Simulation speed');

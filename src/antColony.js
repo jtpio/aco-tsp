@@ -16,12 +16,46 @@ var antColony = (function(ps) {
     var nodes = [];
     var queue = [];
     var container = new PIXI.Container();
+	var pheromoneSpriteGroup = new PIXI.Container();
+	var pheromoneSpritePoll = [];
+	var pheromoneTex = [];
     var back = PIXI.Sprite.fromImage('img/1x1.png');
     var trail = new PIXI.Graphics();
-    var links = new PIXI.Graphics();
     var itText;
     var bestText;
     var nodesText;
+
+
+	// Add the texture for the pheromones
+	for (var i = 1; i <= 3; i++) {
+		pheromoneTex.push(PIXI.Texture.fromImage("img/Pheromone_" + i + ".png"));
+	}
+
+	function _initPheromoneSprites() {
+		pheromoneSpritePoll.forEach(function (sprite) {
+			sprite.alpha = 0;
+		});
+	}
+
+	function _addPheromones(n) {
+		for (var p = 0; p < n; p++) {
+			var pheromone = new PIXI.extras.MovieClip(pheromoneTex);
+			pheromone.animationSpeed = 0.05 + Math.random() * 0.05;
+			pheromone.play();
+			pheromone.anchor.x = 0.5;
+			pheromone.anchor.y = 0.5;
+			pheromone.scale.x = 0.25;
+			pheromone.scale.y = 0.25;
+			pheromone.rotation = Math.random() * 2 * Math.PI;
+			// Start the pheromone out of bounds
+			pheromone.position.x = -1000;
+			pheromone.position.y = -1000;
+			pheromoneSpritePoll.push(pheromone);
+
+			// Add the sprite to the container so it is rendered
+			pheromoneSpriteGroup.addChild(pheromone);
+		}
+	}
 
     function _initGraphics() {
         container.width = 1600;
@@ -47,10 +81,6 @@ var antColony = (function(ps) {
         });
         container.addChild(back);
 
-        // pheromones
-        links.clear();
-        container.addChild(links);
-
         // trail
         trail.clear();
         container.addChild(trail);
@@ -71,6 +101,8 @@ var antColony = (function(ps) {
         nodesText.position.y = 140;
         container.addChild(nodesText);
 
+		// add the pheromone sprite group
+		container.addChild(pheromoneSpriteGroup);
         // add the ant
         container.addChild(ant.getSprite());
 
@@ -90,8 +122,8 @@ var antColony = (function(ps) {
         node.anchor.y = 0.5;
         node.position.x = x;
         node.position.y = y;
-        node.scale.x = 0.17;
-        node.scale.y = 0.17;
+        node.scale.x = 0.20;
+        node.scale.y = 0.20;
         node.interactive = true;
         node.mousedown = node.touchstart = function(data) {
             data.data.originalEvent.preventDefault();
@@ -204,8 +236,15 @@ var antColony = (function(ps) {
             'cost': _cost(initPerm),
             'path': _indicesToNodes(initPerm)
         };
+
         initPheromone = 1.0 / (nodes.length * best.cost);
         _initPheromoneMatrix();
+		_initPheromoneSprites();
+
+		_globalUpdatePheromone(best);
+		_drawLinks();
+		_drawBest();
+
         it = 0;
         time = Date.now();
     }
@@ -225,16 +264,36 @@ var antColony = (function(ps) {
     }
 
     function _drawLinks() {
-        links.clear();
+		var pheromoneCounter = 0;
         for (var i = 0; i < pheromone.length; i++) {
             for (var j = i + 1; j < pheromone[i].length; j++) {
                 if (i !== j) {
-                    links.lineStyle(6, 0xffffff, pheromone[i][j] * 12000);
-                    links.moveTo(nodes[i].position.x, nodes[i].position.y);
-                    links.lineTo(nodes[j].position.x, nodes[j].position.y);
+					var start = nodes[i].position;
+					var end = nodes[j].position;
+					var alpha = util.clamp(pheromone[i][j] * 12000, 0, 1);
+					var steps = Math.round(util.lerp(60, 24, alpha));
+					var points = util.pointsOnLine(start, end, steps);
+					if (alpha < 0.05) {
+						continue;
+					}
+					if (pheromoneCounter + points.length >= pheromoneSpritePoll.length) {
+						_addPheromones(points.length);
+					}
+					for (var p = 0; p < points.length; p++) {
+						var phero = pheromoneSpritePoll[pheromoneCounter];
+						phero.alpha = alpha;
+						phero.position.x = points[p][0];
+						phero.position.y = points[p][1];
+						pheromoneCounter++;
+					}
                 }
             }
         }
+
+		// Hide pheromones that are not used
+		for (var k = pheromoneCounter; k < pheromoneSpritePoll.length; k++) {
+			pheromoneSpritePoll[pheromoneCounter].alpha = 0;
+		}
     }
 
     function _drawBest() {
@@ -264,7 +323,7 @@ var antColony = (function(ps) {
         },
 
         togglePheromones: function () {
-            links.visible = ps.showPheromones;
+            pheromoneSpriteGroup.visible = ps.showPheromones;
         },
 
         togglePath: function () {
@@ -292,6 +351,8 @@ var antColony = (function(ps) {
                         best.path = _indicesToNodes(best.indices);
                         best.it = it;
                         ant.followPath(best.path);
+						_drawLinks();
+						_drawBest();
                     }
                     _localUpdatePheromone(candidate);
                 }
@@ -303,8 +364,6 @@ var antColony = (function(ps) {
                 time = Date.now();
             }
 
-            _drawLinks();
-            _drawBest();
 
         }
     };
