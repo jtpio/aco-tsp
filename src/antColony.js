@@ -298,7 +298,7 @@ var antColony = (function(ps) {
 
                 _globalUpdatePheromone(best);
                 itText.text = 'Iteration #' + it++;
-                bestText.text = "Best: " + Math.round(best.cost) + "\n -> found at #" + best.it;
+                bestText.text = "Best: " + Math.round(best.cost) + "\nfound at #" + best.it;
                 nodesText.text = "Nodes: " + nodes.length;
                 time = Date.now();
             }

@@ -73,8 +73,8 @@ $(document).ready(function() {
         antColony.init(W, H);
 
         // first render
-        antColony.render();
         renderer.render(antColony.container);
+		initDatGui();
 
         function render() {
             var time = Date.now();
@@ -94,7 +94,6 @@ $(document).ready(function() {
             // opacity: 0.9,
             closetransitionend: function () {
                 if (!started) {
-                    initDatGui();
                     requestAnimationFrame(render);
                     started = true;
                 }

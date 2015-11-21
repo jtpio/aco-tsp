@@ -2,8 +2,6 @@ var ant = (function(ps) {
     'use strict';
 
     // rendering
-    var W = 1600;
-	var H = 900;
 	var antTex = [];
 	var tweens = [];
 	var ant;
@@ -21,8 +19,9 @@ var ant = (function(ps) {
         ant.anchor.y = 0.5;
         ant.scale.x = 0.6;
         ant.scale.y = 0.6;
-        ant.position.x = W / 2;
-        ant.position.y = H / 2;
+		// Start the ant out of bounds
+        ant.position.x = -1000;
+        ant.position.y = -1000;
 
     }
 
@@ -35,8 +34,6 @@ var ant = (function(ps) {
     return {
 
         init: function (width, height) {
-            W = width;
-            H = height;
             _initGraphics();
         },
 
