@@ -241,12 +241,10 @@ var antColony = (function(ps) {
         _initPheromoneMatrix();
 		_initPheromoneSprites();
 
-		_globalUpdatePheromone(best);
-		_drawLinks();
-		_drawBest();
-
         it = 0;
         time = Date.now();
+
+		_step();
     }
 
     function _preComputeDistances() {
@@ -306,6 +304,29 @@ var antColony = (function(ps) {
         });
     }
 
+	function _step() {
+		for (var i = 0; i < ps.nbAnts; i++) {
+			var candidate = {};
+			candidate.indices = _stepwiseConst(ps.heuristic);
+			candidate.cost = _cost(candidate.indices);
+			if (candidate.cost < best.cost) {
+				best = candidate;
+				best.path = _indicesToNodes(best.indices);
+				best.it = it;
+				ant.followPath(best.path);
+				_drawLinks();
+				_drawBest();
+			}
+			_localUpdatePheromone(candidate);
+		}
+
+		_globalUpdatePheromone(best);
+		itText.text = 'Iteration #' + it++;
+		bestText.text = "Best: " + Math.round(best.cost) + "\nfound at #" + best.it;
+		nodesText.text = "Nodes: " + nodes.length;
+		time = Date.now();
+	}
+
     return {
         container: container,
         addNode: _addNode,
@@ -341,30 +362,9 @@ var antColony = (function(ps) {
 
             if (toInit) _init();
 
-            if (dt * ps.simulationSpeed >= 1) {
-                for (var i = 0; i < ps.nbAnts; i++) {
-                    var candidate = {};
-                    candidate.indices = _stepwiseConst(ps.heuristic);
-                    candidate.cost = _cost(candidate.indices);
-                    if (candidate.cost < best.cost) {
-                        best = candidate;
-                        best.path = _indicesToNodes(best.indices);
-                        best.it = it;
-                        ant.followPath(best.path);
-						_drawLinks();
-						_drawBest();
-                    }
-                    _localUpdatePheromone(candidate);
-                }
-
-                _globalUpdatePheromone(best);
-                itText.text = 'Iteration #' + it++;
-                bestText.text = "Best: " + Math.round(best.cost) + "\nfound at #" + best.it;
-                nodesText.text = "Nodes: " + nodes.length;
-                time = Date.now();
-            }
-
-
+			if (dt * ps.simulationSpeed >= 1) {
+				_step(dt);
+			}
         }
     };
 
