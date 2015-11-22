@@ -108,10 +108,14 @@ var antColony = (function(ps) {
 
     }
 
+
+	// Hard-coded set of default nodes
+	// Better looking than random nodes
     function _initColony() {
-        for (var i = 0; i < 5; i++) {
-            _addNode(~~((Math.random() * 0.8 + 0.1) * W), ~~((Math.random() * 0.8 + 0.1) * H));
-        }
+		_addNode(500, 150);
+		_addNode(1000, 250);
+		_addNode(1200, 500);
+		_addNode(200, 600);
     }
 
     function _addNode(x, y) {
