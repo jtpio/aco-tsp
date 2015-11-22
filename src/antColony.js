@@ -230,6 +230,9 @@ var antColony = (function(ps) {
 
     function _init() {
         _preComputeDistances();
+        it = 0;
+        time = Date.now();
+
         var initPerm = _randomPermutation();
         best = {
             'indices': initPerm,
@@ -241,10 +244,6 @@ var antColony = (function(ps) {
         _initPheromoneMatrix();
 		_initPheromoneSprites();
 
-        it = 0;
-        time = Date.now();
-
-		_step();
     }
 
     function _preComputeDistances() {
@@ -309,7 +308,8 @@ var antColony = (function(ps) {
 			var candidate = {};
 			candidate.indices = _stepwiseConst(ps.heuristic);
 			candidate.cost = _cost(candidate.indices);
-			if (candidate.cost < best.cost) {
+			// Use it === 1 to invalidate the first random choice
+			if (candidate.cost < best.cost || it === 1) {
 				best = candidate;
 				best.path = _indicesToNodes(best.indices);
 				best.it = it;

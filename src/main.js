@@ -27,10 +27,7 @@ $(document).ready(function() {
         var gui = new dat.GUI();
         var controllers = [];
         controllers.push(gui.add(params, 'nbAnts', 1, 20).name('Number of Ants'));
-        controllers.push(gui.add(params, 'decay', 0, 0.5).name('Decay factor'));
-        controllers.push(gui.add(params, 'greedy', 0, 2).name('Greediness factor'));
-        controllers.push(gui.add(params, 'localPheromone', 0, 1).name('History factor'));
-        gui.add(params, 'simulationSpeed', 0.1, 100).name('Simulation speed');
+        gui.add(params, 'simulationSpeed', 0.1, 100).name('Demo speed');
         controllers.push(gui.add(params, 'antSpeed', 1, 5).step(1).name('Ant speed'));
         gui.add(params, 'showPheromones').name('Pheromones').onChange(function (value) {
             antColony.togglePheromones();
